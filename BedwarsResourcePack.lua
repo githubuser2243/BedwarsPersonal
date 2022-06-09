@@ -44,7 +44,7 @@ local function getcustomassetfunc(path)
             setthreadidentity(2)
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/7GrandDadPGN/personalscripts/main/RobloxBedwarsMinecraft/"..path,
+			Url = "https://raw.githubusercontent.com/supercellgamer/BedwarsPersonal/main/RobloxBedwarsMinecraft/"..path,
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -75,7 +75,7 @@ end
 
 local function downloadassets(path2)
     local json = requestfunc({
-        Url = "https://api.github.com/repos/7GrandDadPGN/personalscripts/contents/RobloxBedwarsMinecraft/"..path2,
+        Url = "https://api.github.com/repos/supercellgamer/BedwarsPersonal/contents/RobloxBedwarsMinecraft/"..path2,
         Method = "GET"
     })
     local decodedjson = game:GetService("HttpService"):JSONDecode(json.Body)
@@ -113,7 +113,6 @@ cachesize("bedwars/ui/container/generic_54.png")
 local Flamework = require(game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
 local newupdate = game.Players.LocalPlayer.PlayerScripts.TS:FindFirstChild("ui") and true or false
 repeat wait() until Flamework.isInitialized
-local KnitClient = require(game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"].knit.src).KnitClient
 local soundslist = require(game:GetService("ReplicatedStorage").TS.sound["game-sound"]).GameSound
 local sounds = (newupdate and require(game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"]["@easy-games"]["game-core"].out).SoundManager or require(game:GetService("ReplicatedStorage").TS.sound["sound-manager"]).SoundManager)
 local footstepsounds = require(game.ReplicatedStorage.TS.sound["footstep-sounds"])
@@ -207,3 +206,4 @@ for i,v in pairs(listfiles("bedwars/sounds")) do
         soundslist[str] = getcustomassetfunc(v)
     end
 end 
+
