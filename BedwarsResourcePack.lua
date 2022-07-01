@@ -3,6 +3,11 @@ repeat wait() until game:IsLoaded() == true
 --repeat wait() until game.ReplicatedStorage.Items ~= nil
 --repeat wait() until game.Workspace ~= nil 
 --repeat wait() until game.Workspace:FindFirstChild("Map") ~= nil
+repeat wait() until game:IsLoaded() == true
+repeat wait() until game.ReplicatedStorage ~= nil
+repeat wait() until game.ReplicatedStorage.Items ~= nil
+repeat wait() until game.Workspace ~= nil 
+repeat wait() until game.Workspace:FindFirstChild("Map") ~= nil
 
 local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
 local setthreadidentity = syn and syn.set_thread_identity or set_thread_identity or setidentity
@@ -44,7 +49,7 @@ local function getcustomassetfunc(path)
             setthreadidentity(2)
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/supercellgamer/BedwarsPersonal/main/RobloxBedwarsMinecraft/"..path,
+			Url = "https://raw.githubusercontent.com/supercellgamer/BedwarsPersonal/main/"..path,
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -75,7 +80,7 @@ end
 
 local function downloadassets(path2)
     local json = requestfunc({
-        Url = "https://api.github.com/repos/supercellgamer/BedwarsPersonal/contents/RobloxBedwarsMinecraft/"..path2,
+        Url = "https://api.github.com/repos/supercellgamer/BedwarsPersonal/contents/"..path2,
         Method = "GET"
     })
     local decodedjson = game:GetService("HttpService"):JSONDecode(json.Body)
@@ -161,9 +166,9 @@ local soundmanager = require(game:GetService("ReplicatedStorage")["rbxts_include
 local itemviewport = require(game.Players.LocalPlayer.PlayerScripts.TS.controllers.global.inventory.ui["item-viewport"]).ItemViewport
 local empty = debug.getupvalue(hotbartile.render, 6)
 local tween = debug.getupvalue(hotbartile.tweenPosition, 1)
---local hotbarimage = getcustomassetfunc("bedwars/ui/widgets.png")
---local healthimage = getcustomassetfunc("bedwars/ui/icons.png")
---local shopimage = getcustomassetfunc("bedwars/ui/container/generic_54.png")
+local hotbarimage = getcustomassetfunc("bedwars/ui/widgets.png")
+local healthimage = getcustomassetfunc("bedwars/ui/icons.png")
+local shopimage = getcustomassetfunc("bedwars/ui/container/generic_54.png")
 local flashing = false
 local realcode = ""
 local oldrendercustommatch = hotbarcustommatchsection.render
@@ -207,3 +212,63 @@ for i,v in pairs(listfiles("bedwars/sounds")) do
     end
 end 
 
+
+local getasset = getsynasset or getcustomasset
+for i,v in pairs(listfiles("bedwars")) do
+    local str = tostring(tostring(v):gsub('bedwars\\', ""):gsub(".png", ""))
+    local item = game.ReplicatedStorage.Items:FindFirstChild(str)
+    if item then
+        for i2,v2 in pairs(item:GetDescendants()) do
+            if v2:IsA("Texture") then
+                v2.Texture = getasset(v)
+            end
+        end
+    end
+end
+for i,v in pairs(getgc(true)) do
+    if type(v) == "table" and rawget(v, "wool_blue") and type(v["wool_blue"]) == "table" then
+        for i2,v2 in pairs(v) do
+            if isfile("bedwars/"..i2..".png") then
+                if rawget(v2, "block") and rawget(v2["block"], "greedyMesh") then
+                    if #v2["block"]["greedyMesh"]["textures"] > 1 and isfile("bedwars/"..i2.."_side_1.png") then
+                        for i3,v3 in pairs(v2["block"]["greedyMesh"]["textures"]) do
+                            v2["block"]["greedyMesh"]["textures"][i3] = getasset("bedwars/"..i2.."_side_"..i3..".png")
+                        end
+                    else
+                    v2["block"]["greedyMesh"]["textures"] = {
+                            [1] = getasset("bedwars/"..i2..".png")
+                    }
+                    end
+                    if isfile("bedwars/"..i2.."_image.png") then
+                        v2["image"] = getasset("bedwars/"..i2.."_image.png")
+                    end
+                else
+                    v2["image"] = getasset("bedwars/"..i2..".png")
+                end
+            end
+        end
+    end
+end
+for i,v in pairs(game.Workspace.Map.Blocks:GetChildren()) do
+    if isfile("bedwars/"..v.Name..".png") then
+        for i2,v2 in pairs(v:GetDescendants()) do
+            if v2:IsA("Texture") then
+                v2.Texture = getasset("bedwars/"..v.Name..".png")
+            end
+        end
+    end
+end
+game.Workspace.Map.Blocks.ChildAdded:connect(function(v)
+    if isfile("bedwars/"..v.Name..".png") then
+        for i2,v2 in pairs(v:GetDescendants()) do
+            if v2:IsA("Texture") then
+                v2.Texture = getasset("bedwars/"..v.Name..".png")
+            end
+        end
+        v.DescendantAdded:connect(function(v3)
+            if v3:IsA("Texture") then
+                v3.Texture = getasset("bedwars/"..v.Name..".png")
+            end
+        end)
+    end
+end)
