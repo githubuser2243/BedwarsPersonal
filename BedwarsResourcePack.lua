@@ -103,6 +103,10 @@ if isfolder("bedwars/sounds") == false then
 	makefolder("bedwars/sounds")
 end
 downloadassets("bedwars/sounds")
+if isfolder("bedwars/ui") == false then
+	makefolder("bedwars/ui")
+end
+downloadassets("bedwars/sounds")
 if isfolder("bedwars/sounds/footstep") == false then
 	makefolder("bedwars/sounds/footstep")
 end
