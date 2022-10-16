@@ -49,7 +49,7 @@ local function getcustomassetfunc(path)
             setthreadidentity(2)
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/supercellgamer/BedwarsPersonal/main/"..path,
+			Url = "https://raw.githubusercontent.com/githubuser2243/BedwarsPersonal/main/"..path,
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -80,7 +80,7 @@ end
 
 local function downloadassets(path2)
     local json = requestfunc({
-        Url = "https://api.github.com/repos/supercellgamer/BedwarsPersonal/contents/"..path2,
+        Url = "https://api.github.com/repos/githubuser2243/BedwarsPersonal/contents/"..path2,
         Method = "GET"
     })
     local decodedjson = game:GetService("HttpService"):JSONDecode(json.Body)
